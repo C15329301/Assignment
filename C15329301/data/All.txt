@@ -1,3 +1,4 @@
 Iron Helmet
 Orkish Helmet
 Iron Sword
+Health Potion

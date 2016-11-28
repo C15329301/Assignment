@@ -1,15 +1,23 @@
-PImage[] images = new PImage[3];
+
 PImage background;
 PShape star;
+PShape Icon;
 
-Box b1;
+
+Icon ic;
+Icon ic1;
+Box b1, b2;
 Square square;
 Cursor mouse;
 
 int UI = 0;
 int equip = 0;
-int selection =0;
+float equip2 = 0;
+int selection = 0;
+int selectionM = 0;
 
+float posX;
+float posY;
 
 float wid = 50;
 float hig = 200;
@@ -33,15 +41,14 @@ float len;
 void setup()
 {
   noCursor();
+  ic = new Icon();
+  ic1 = new Icon();
   b1 = new Box();
+  b2 = new Box();
   square = new Square();
   mouse = new Cursor();
   size(1100,800);
   background = loadImage("Skyrim.jpg"); 
-  for (int i = 1; i< images.length; i++)
-  {
-     images[i] = loadImage( i + ".png" );
-  }
 
 }
 
@@ -53,7 +60,6 @@ void draw()
     if(key == 'm' || key == 'M')
     {
         UI = 1;
-        Mouse();
     }
   }
   if(keyPressed)
@@ -69,7 +75,7 @@ void draw()
             Start();
             mouse.Update();
           break;
-          case 1: 
+          case 1:
             Menu1();
             mouse.Update();
           break;
@@ -78,8 +84,9 @@ void draw()
             options();
             mouse.Update();
           break;
-          case 3: 
+          case 3:
             NoMenu();
+            magic();
             mouse.Update();
           break;
           case 4:
@@ -94,10 +101,6 @@ void draw()
         }
 }
         
-  void Mouse()
-  {
-     //Draw Mouse
-  }
 
   void NoMenu()
   {
@@ -108,7 +111,7 @@ void draw()
     image(background, 0, 0);
     fill(0);
     textSize(60);
-    text("Skyrim UI", width/2.5, height/16);
+    text("Sci(rim) UI", width/2.5, height/16);
     textSize(40);
     text("Press 'm' or 'x' To Exit", width/2.9, height/9);
   }
@@ -219,12 +222,12 @@ void draw()
     fill(0,0,0, 25);
     b1.DisplayBox(1);
 
-    for(String s1: Items)
+    for(String s: Items)
     {
         strokeWeight(5);
         textSize(textSize);
         fill(255);
-        text(s1, width/12, height/len + div);
+        text(s, width/12, height/len + div);
         div += textH;
     }
         
@@ -263,7 +266,7 @@ void draw()
         switch(selection) 
         {
           case 1: 
-            All();
+            AllI();
           break;
           case 2: 
             Weapons();
@@ -276,13 +279,85 @@ void draw()
           break;
         }
       }
- 
-  void All()
+  void magic()
   {
-    String[] All = loadStrings("All.txt");
-    len = All.length;
+    String[] Magic = loadStrings("Magic.txt");
+    len = Magic.length;
+  
+  
+    tint(150);
     int div = 60;
-    for(String s2: All)
+    
+    
+    stroke(255);
+    fill(0,0,0, 25);
+    b2.DisplayBox(1);
+
+    for(String s: Magic)
+    {
+        strokeWeight(5);
+        textSize(textSize);
+        fill(255);
+        text(s, width/12, height/len + div);
+        div += textH;
+    }
+        
+          if((mouseY > height/len + boxW1 && mouseY < height/len + div2 && mouseX > boxW1 && mouseX < boxW2) || selectionM == 1)
+          {
+            triangle(width/14, height/len + halfW, width/20, height/len + quartW, width/20, height/len + halfW+quartW);
+            if(mousePressed)
+            {
+               selectionM = 1;
+            }
+          }
+          if((mouseY > height/len + div2 && mouseY < height/len + 2*div2 && mouseX > boxW1 && mouseX < boxW2) || selectionM == 2)
+          {
+            triangle(width/14, height/len + halfW + textH, width/20, height/len + quartW + textH, width/20, height/len + halfW + quartW + textH);
+            if(mousePressed)
+            {
+               selectionM = 2;
+            }
+          }
+          if((mouseY > height/len + 2*div2 && mouseY < height/len + 3*div2 && mouseX > boxW1 && mouseX < boxW2) || selectionM == 3)
+          {
+            triangle(width/14, height/len + halfW + 2*textH, width/20, height/len + quartW + 2*textH, width/20, height/len + halfW + quartW + 2*textH);
+            if(mousePressed)
+            {
+               selectionM = 3;
+            }
+          }
+          if((mouseY > height/len + 3*div2 && mouseY < height/len + 4*div2 && mouseX > boxW1 && mouseX < boxW2) || selectionM == 4)
+          {
+            triangle(width/14, height/len + halfW + 3*textH, width/20, height/len + quartW + 3*textH, width/20, height/len + halfW + quartW + 3*textH);
+            if(mousePressed)
+            {
+               selectionM = 4;
+            }
+          }
+
+        switch(selectionM) 
+        {
+          case 1: 
+            AllM();
+          break;
+          case 2: 
+            Conjuration();
+          break;
+          case 3: 
+            SpaceMagic();
+          break;
+          case 4: 
+            Destruction();
+          break;
+        }
+      }
+ 
+  void AllI()
+  {
+    String[] AllI = loadStrings("All.txt");
+    len = AllI.length;
+    int div = 85;
+    for(String s2: AllI)
     {
         strokeWeight(5);
         textSize(textSize);
@@ -297,10 +372,13 @@ void draw()
     
     if(mouseX > 2*boxW1 + boxW2 && mouseX < 2*boxW1 + boxW2 || selection > 0)
     {
-      for(int i = 0; i<= len; i++)
+      for(int i = 1; i<= len; i++)
       {
            if(mouseY > height/len + (i-1)*div2 && mouseY < height/len + i*div2)
            {
+             float x = height/len + 180;
+             float y = height/len + i*60 + 10;
+             ic.position(x, y);
              if(mousePressed)
              {
                if(i==1)
@@ -315,18 +393,140 @@ void draw()
                {
                  equip = 3;
                }
-
+               if(i==4)
+               {
+                 equip = 4;
+               }
+              
              }
              
            }
            
       }
    }
-   line(100*equip, 100*equip, 0, 0);
   }
-   
+  void AllM()
+  {
+    String[] allM = loadStrings("AllMagic.txt");
+    int lengt = allM.length;
+    int divis = 85;
+    for(String s2: allM)
+    {
+        strokeWeight(5);
+        textSize(textSize);
+        fill(white);
+        text(s2, width/2.80, height/lengt + divis);
+        divis += textH;
+    }
+    
+    stroke(255);
+    fill(0,0,0, 50);
+    b2.DisplayBox(2);
+    
+    if(mouseX > 2*boxW1 + boxW2 && mouseX < 2*boxW1 + boxW2 || selectionM > 0)
+    {
+      for(int i = 1; i<= lengt; i++)
+      {
+           if(mouseY > height/lengt + (i-1)*div2 && mouseY < height/lengt + i*div2)
+           {
+             float x1 = height/lengt + 180;
+             float y1 = height/lengt + i*60 + 10;
+             ic1.position(x1, y1);
+             if(mousePressed)
+             {
+               if(i==1)
+               {
+                 //Fireball
+                 equip2 = 1;
+               }
+               if(i==2)
+               {
+                 //Shock
+                 equip2 = 2;
+               }
+               if(i==3)
+               {
+                 //Moon Walk
+                 equip2 = 3;
+               }
+               if(i==4)
+               {
+                 //Ice
+                 equip2 = 4;
+               }
+
+             }
+             
+           }
+           line(0,0, 100*equip2, 100*equip2);
+      }
+   }
+  }
+ /* void Magic()
+  {
+    tint(100);
+    image(background, 0, 0);
+    strokeWeight(5);
+    stroke(white);
+    noFill(); 
+    String[] Magic = loadStrings("Magic.txt");
+    len = Magic.length;
   
- 
+  
+    tint(150);
+    int div = 60;
+    
+    
+    stroke(255);
+    fill(0,0,0, 25);
+    b1.DisplayBox(1);
+
+    for(String s1: Magic)
+    {
+        strokeWeight(5);
+        textSize(textSize);
+        fill(255);
+        text(s1, width/12, height/len + div);
+        div += textH;
+    }
+    if((mouseY > height/len + boxW1 && mouseY < height/len + div2 && mouseX > boxW1 && mouseX < boxW2) || selection == 1)
+          {
+            triangle(width/14, height/len + halfW, width/20, height/len + quartW, width/20, height/len + halfW+quartW);
+            if(mousePressed)
+            {
+               selectionM = 1;
+            }
+          }
+          if((mouseY > height/len + div2 && mouseY < height/len + 2*div2 && mouseX > boxW1 && mouseX < boxW2) || selection == 2)
+          {
+            triangle(width/14, height/len + halfW + textH, width/20, height/len + quartW + textH, width/20, height/len + halfW + quartW + textH);
+            if(mousePressed)
+            {
+               selectionM = 2;
+            }
+          }
+          if((mouseY > height/len + 2*div2 && mouseY < height/len + 3*div2 && mouseX > boxW1 && mouseX < boxW2) || selection == 3)
+          {
+            triangle(width/14, height/len + halfW + 2*textH, width/20, height/len + quartW + 2*textH, width/20, height/len + halfW + quartW + 2*textH);
+            if(mousePressed)
+            {
+               selectionM = 3;
+            }
+          }
+        switch(selectionM) 
+        {
+          case 1: 
+            AllM();
+          break;
+          case 2: 
+            Conjuration();
+          break;
+          case 3: 
+            SpaceMagic();
+          break;
+        }
+      }*/
+    
   void Weapons()
   {
     b1.DisplayBox(2);
@@ -338,6 +538,19 @@ void draw()
   }
   
   void Food()
+  {
+    b1.DisplayBox(2);
+  }
+  void Conjuration()
+  {
+    b1.DisplayBox(2);
+  }
+  
+  void SpaceMagic()
+  {
+    b1.DisplayBox(2);
+  }
+  void Destruction()
   {
     b1.DisplayBox(2);
   }
