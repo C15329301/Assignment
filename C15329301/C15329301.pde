@@ -4,16 +4,25 @@ PImage background;
 PShape star;
 PShape Icon;
 PShape Health;
+PShape Radar;
+
+float cx = width / 2;
+float cy = height / 2;
+float speed1 = 0.1; // How fast we want the radar to spin 
+float theta = 0.0;
+float radius1 = 200;
+    
 
 Minim minim;
 AudioPlayer scream, Slurp;
 
-
+int time;
 Icon ic;
 Icon ic1;
 Box b1, b2;
 Star star1;
 Cursor mouse;
+Radar radar;
 
 int UI = 0;
 int equip = 0;
@@ -25,7 +34,10 @@ float posX;
 float posY;
 
 int Hp = 150;
-int Sp = 150;
+int Sp = 200;
+
+int min = 0;
+int hr = 0;
 
 float wid = 50;
 float hig = 200;
@@ -35,7 +47,7 @@ int white = 255;
 int grey = 100;
 int radius = 150;
 
-int hr = 0, min = 0;
+
    
 String s1, s2;
 int boxW1 = 20;
@@ -59,6 +71,8 @@ void setup()
   b2 = new Box();
   star1 = new Star();
   mouse = new Cursor();
+  radar = new Radar();
+ 
   size(1100,800);
   background = loadImage("Earth.jpg"); 
   
@@ -103,7 +117,7 @@ void draw()
           break;
           case 4:
             NoMenu();
-            Radar();
+            radar.dis();
           break;
           case 5:
             NoMenu();
@@ -139,17 +153,27 @@ void draw()
         rect(300, 130, 200, 50);
         fill(0);
         textSize(20);
-        text("Time  " + hr + ":" + min, 350, 165);
+        if (min == 60)
+        {
+          min = 0;
+          hr = hr + 1;
+        }
+        if(hr == 24)
+        {
+          hr = 0;
+        }
+        text("Time  " + hr + ":" + min + " o'clock", 305, 165);
         
+        textSize(15);
         fill(#C1191C);
         rect(900, 20, 100, 100);
         fill(white);
-        text("-10HP", 920, 80);
+        text("-10 Hull", 920, 80);
         
         fill(#C1191C);
         rect(900, 140, 100, 100);
         fill(white);
-        text("-10SP", 920, 200);
+        text("-10 Shield", 910, 200);
         if(mouseX > 900 && mouseX < 1000 && mouseY > 20 && mouseY < 120)
         {
           if(mousePressed && Sp ==0)
@@ -187,11 +211,11 @@ void draw()
   void Start()
   {
     image(background, 0, 0);
-    fill(white);
+    fill(150, 255, 100);
     textSize(60);
     text("Space Ship UI", width/3, height/2);
     textSize(40);
-    text("Press 'm' or 'x' To Exit", width/3.5, height/1.8);
+    text("Press 'm' or 'x' To Exit", width/3.5 + 30, height/1.8);
   }
   void Menu1()
   {
@@ -391,7 +415,8 @@ void draw()
                }
                if(i==3)
                {
-                 equip = 3;
+                 hr = 0;
+                 min = 0;
                }
                if(i==4)
                {
@@ -448,6 +473,8 @@ void draw()
                {
                  //Stop
                  speed = 0;
+                 Sp = 0;
+                 Hp = Hp - 20;
                }
                if(i==2)
                {
@@ -477,30 +504,34 @@ void draw()
       }
    }
   }
-  void Radar()
-{
-  
-  float cx = width / 2;
-  float cy = height / 2;  
-  float theta = map(mouseY, 0, height, 0, TWO_PI);
-  float radius = 200;
-  
-  stroke(0);
-  fill(0,255,0);
-  // Draw the outside of the radar
-  ellipse(cx, cy, radius * 2, radius * 2);
 
-    float lineTheta = theta;
-    stroke(0, 255);
-    float x = cx + sin(lineTheta) * radius;
-    float y = cy - cos(lineTheta) * radius;
-    line(cx, cy, x, y); 
-}
 void time()
 {
- rect(width/2 - 50, height/2 -50, 100, 100);
-  
-  
+ fill(#AD00ED);
+ rect(width/2 - 100, height/2 -50, 100, 100);
+ rect(width/2 + 100, height/2 -50, 100, 100);
+ fill(0);
+ text("Nap", width/2 - 80, height/2);
+ text("Sleep", width/2 + 115, height/2);
+ if(mouseX < width/2 && mouseX > width/2 - 100 && mouseY < height/2 + 50 && mouseY > height/2 - 50)
+ {
+   if(mousePressed)
+   {
+     min = min + 15;
+   }
+ }
+ if(mouseX < width/2 + 200 && mouseX > width/2 + 100 && mouseY < height/2 + 50 && mouseY > height/2 - 50)
+ {
+   if(mousePressed)
+   {
+     hr = hr + 1;
+   }
+ }
 }
+ 
+ 
+  
+  
+
   
      
