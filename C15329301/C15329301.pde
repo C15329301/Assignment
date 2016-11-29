@@ -6,11 +6,6 @@ PShape Icon;
 PShape Health;
 PShape Radar;
 
-float cx = width / 2;
-float cy = height / 2;
-float speed1 = 0.1; // How fast we want the radar to spin 
-float theta = 0.0;
-float radius1 = 200;
     
 
 Minim minim;
@@ -30,8 +25,6 @@ float equip2 = 0;
 int selection = 0;
 int selectionM = 0;
 
-float posX;
-float posY;
 
 int Hp = 150;
 int Sp = 200;
@@ -45,7 +38,7 @@ float hig1 = hig + 20;
 int a = 100, b = 100, c = 100, d = 100;
 int white = 255;
 int grey = 100;
-int radius = 150;
+
 
 
    
@@ -56,7 +49,6 @@ int textH = 60;
 int div2 = 80;
 int halfW = 50;
 int quartW= 25;
-int text = 100;
 int textSize = 30;
 float len;
 
@@ -117,7 +109,8 @@ void draw()
           break;
           case 4:
             NoMenu();
-            radar.dis();
+            radar.update();
+            radar.render();
           break;
           case 5:
             NoMenu();
@@ -242,7 +235,7 @@ void draw()
     text("OPTIONS", width/2 + hig1, height/2 + 15);
     text("ENGINE", width/2 - 320, height/2 + 15);
     text("TIME", width/2 - 40, height/2 - hig1);
-    text("RADAR", width/2 - 40, height/2 + hig1 + 10);
+    text("RADAR", width/2 - 45, height/2 + hig1 + 20);
     
     if(mouseX >= width/2 + wid*2 && mouseX <= width/2 + 350 && mouseY <= height/2 + 30 && mouseY >= height/2)
     {
@@ -474,7 +467,6 @@ void draw()
                  //Stop
                  speed = 0;
                  Sp = 0;
-                 Hp = Hp - 20;
                }
                if(i==2)
                {
