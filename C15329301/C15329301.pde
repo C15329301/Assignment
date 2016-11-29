@@ -1,8 +1,12 @@
-import ddf.minim*;
+import ddf.minim.*;
+
 PImage background;
 PShape star;
 PShape Icon;
 PShape Health;
+
+Minim minim;
+AudioPlayer scream, Slurp;
 
 
 Icon ic;
@@ -20,7 +24,7 @@ int selectionM = 0;
 float posX;
 float posY;
 
-int Hp = 0;
+int Hp = 150;
 
 float wid = 50;
 float hig = 200;
@@ -41,6 +45,8 @@ int text = 100;
 int textSize = 30;
 float len;
 
+int tHr = 0, Hr = 0, tMin = 0, Min = 0;
+
 void setup()
 {
   noCursor();
@@ -52,6 +58,10 @@ void setup()
   mouse = new Cursor();
   size(1100,800);
   background = loadImage("Skyrim.jpg"); 
+  
+  minim = new Minim(this);
+  scream = minim.loadFile("Scream.mp3");
+  Slurp = minim.loadFile("Slurp.mp3");
 
 }
 
@@ -90,6 +100,7 @@ void draw()
           break;
           case 4:
             NoMenu();
+            Radar();
           break;
           case 5:
             NoMenu();
@@ -100,10 +111,16 @@ void draw()
         strokeWeight(4);
         rect(50, 20, 200, 50);
         fill(#0F7120);
-        rect(50, 20, 150 + Hp, 50);
+        rect(50, 20, Hp, 50);
         fill(white);
         textSize(20);
         text("HEALTH", 100, 50);
+        
+        fill(white);
+        rect(50, 130, 200, 50);
+        fill(0);
+        textSize(20);
+        text(tHr + Hr + ":"+ tMin + Min, 100, 165);
         
         fill(#C1191C);
         rect(900, 20, 100, 100);
@@ -113,8 +130,17 @@ void draw()
         {
           if(mousePressed)
           {
-            Hp =- 10; 
+            if(Hp > 0)
+            {
+              Hp = Hp - 10; 
+              scream.rewind();
+              scream.play();
+            }
           }
+        }
+        if(Hp == 0)
+        {
+          exit();
         }
         mouse.Update();
 }
@@ -127,7 +153,7 @@ void draw()
   void Start()
   {
     image(background, 0, 0);
-    fill(0);
+    fill(white);
     textSize(60);
     text("Sci(rim) UI", width/3, height/16);
     textSize(40);
@@ -158,7 +184,7 @@ void draw()
     text("ITEMS", width/2 + hig1, height/2 + 15);
     text("MAGIC", width/2 - 310, height/2 + 15);
     text("LEVEL UP", width/2 - 65, height/2 - hig1);
-    text("TIME", width/2 - 40, height/2 + hig1);
+    text("TIME", width/2 - 40, height/2 + hig1 + 10);
     
     if(mouseX >= width/2 + wid*2 && mouseX <= width/2 + 350 && mouseY <= height/2 + 30 && mouseY >= height/2)
     {
@@ -334,7 +360,12 @@ void draw()
                }
                if(i==4)
                {
-                 equip = 4;
+                 if(Hp < 200)
+                 {
+                   Hp = Hp + 20;
+                   Slurp.rewind();
+                   Slurp.play();
+                 }
                }
               
              }
@@ -400,5 +431,28 @@ void draw()
       }
    }
   }
+  void Radar()
+{
+  
+  float cx = width / 2;
+  float cy = height / 2;
+  float speed = 0.01; // How fast we want the radar to spin  
+  float theta = map(mouseY, 0, height, 0, TWO_PI);
+  float radius = 200;
+  
+  stroke(0);
+  fill(0,255,0);
+  // Draw the outside of the radar
+  ellipse(cx, cy, radius * 2, radius * 2);
+
+    float lineTheta = theta;
+    stroke(0, 255);
+    float x = cx + sin(lineTheta) * radius;
+    float y = cy - cos(lineTheta) * radius;
+    line(cx, cy, x, y);
+    
+    // An arc might be an even better solution
+  
+}
   
      

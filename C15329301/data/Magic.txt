@@ -1,4 +1,4 @@
 All
-Conjuration
-Space Magic
-Destruction
+DESTRUCTION
+SPACE MAGIC
+CONJURATION

@@ -1,4 +1,4 @@
-Iron Helmet
-Orkish Helmet
-Iron Sword
+Helmet
+Space Suit
+Pants
 Health Potion
