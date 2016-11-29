@@ -1,6 +1,6 @@
-class Square
+class Star
 {
-   Square()
+   Star()
    {
     int starW = 100;
     int starD = 20;
