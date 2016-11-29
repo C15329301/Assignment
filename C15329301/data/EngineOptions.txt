@@ -1,4 +1,4 @@
-Max Speed
+Stop
 Speed Up
 Speed Down
-Stop
+Max Speed

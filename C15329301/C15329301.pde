@@ -34,6 +34,8 @@ int a = 100, b = 100, c = 100, d = 100;
 int white = 255;
 int grey = 100;
 int radius = 150;
+
+int hr = 0, min = 0;
    
 String s1, s2;
 int boxW1 = 20;
@@ -132,6 +134,12 @@ void draw()
         fill(0);
         textSize(20);
         text("SPEED:" + speed, 100, 165);
+        
+        fill(#3BC149);
+        rect(300, 130, 200, 50);
+        fill(0);
+        textSize(20);
+        text("Time  " + hr + ":" + min, 350, 165);
         
         fill(#C1191C);
         rect(900, 20, 100, 100);
@@ -372,11 +380,14 @@ void draw()
              {
                if(i==1)
                {
-                 equip = 1;
+                 if(Sp < 200)
+                 {
+                    Sp = Sp + 20;
+                 }
                }
                if(i==2)
                {
-                 equip = 2;
+                 Hp = 0;
                }
                if(i==3)
                {
@@ -390,6 +401,11 @@ void draw()
                    Slurp.rewind();
                    Slurp.play();
                  }
+               }
+               if(i==5)
+               {
+                 
+                 line(0,0, 100,100);
                }
               
              }
@@ -417,7 +433,7 @@ void draw()
     fill(0,0,0, 50);
     b2.DisplayBox(2);
     
-    if(mouseX > 2*boxW1 + boxW2 && mouseX < 2*boxW1 + boxW2 || selectionM > 0)
+    if(mouseX > 2*boxW1 + boxW2 && mouseX < 3*boxW1 + boxW2 || selectionM > 0)
     {
       for(int i = 1; i<= lengt; i++)
       {
@@ -430,9 +446,8 @@ void draw()
              {
                if(i==1)
                {
-                 //Self Destruct
-                 speed = 3000;
-                 Sp = 0;
+                 //Stop
+                 speed = 0;
                }
                if(i==2)
                {
@@ -451,8 +466,9 @@ void draw()
                }
                if(i==4)
                {
-                 //Stop
-                 speed = 0;
+                 //Max Speed
+                 speed = 3000;
+                 Sp = 0;
                }
 
              }
@@ -482,7 +498,7 @@ void draw()
 }
 void time()
 {
- 
+ rect(width/2 - 50, height/2 -50, 100, 100);
   
   
 }

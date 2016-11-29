@@ -1,4 +1,4 @@
+Regenerate Shield
 Self Destruct
-Regenerate Shields
-Repair
 Slow Time
+Repair
