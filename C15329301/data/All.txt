@@ -1,4 +1,4 @@
-Helmet
-Space Suit
-Pants
-Health Potion
+Self Destruct
+Regenerate Shields
+Repair
+Slow Time

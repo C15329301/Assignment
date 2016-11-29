@@ -25,6 +25,7 @@ float posX;
 float posY;
 
 int Hp = 150;
+int Sp = 150;
 
 float wid = 50;
 float hig = 200;
@@ -45,7 +46,7 @@ int text = 100;
 int textSize = 30;
 float len;
 
-int tHr = 0, Hr = 0, tMin = 0, Min = 0;
+float speed = 0;
 
 void setup()
 {
@@ -57,7 +58,7 @@ void setup()
   star1 = new Star();
   mouse = new Cursor();
   size(1100,800);
-  background = loadImage("Skyrim.jpg"); 
+  background = loadImage("Earth.jpg"); 
   
   minim = new Minim(this);
   scream = minim.loadFile("Scream.mp3");
@@ -96,7 +97,7 @@ void draw()
           break;
           case 3:
             NoMenu();
-            magic();
+            Engine();
           break;
           case 4:
             NoMenu();
@@ -104,6 +105,7 @@ void draw()
           break;
           case 5:
             NoMenu();
+            time();
           break;
           
         }
@@ -116,25 +118,49 @@ void draw()
         textSize(20);
         text("HEALTH", 100, 50);
         
+        noFill();
+        strokeWeight(4);
+        rect(300, 20, 200, 50);
+        fill(#3B42C1);
+        rect(300, 20, Sp, 50);
+        fill(white);
+        textSize(20);
+        text("SHIELDS", 350, 50);
+        
         fill(white);
         rect(50, 130, 200, 50);
         fill(0);
         textSize(20);
-        text(tHr + Hr + ":"+ tMin + Min, 100, 165);
+        text("SPEED:" + speed, 100, 165);
         
         fill(#C1191C);
         rect(900, 20, 100, 100);
         fill(white);
         text("-10HP", 920, 80);
+        
+        fill(#C1191C);
+        rect(900, 140, 100, 100);
+        fill(white);
+        text("-10SP", 920, 200);
         if(mouseX > 900 && mouseX < 1000 && mouseY > 20 && mouseY < 120)
         {
-          if(mousePressed)
+          if(mousePressed && Sp ==0)
           {
             if(Hp > 0)
             {
               Hp = Hp - 10; 
               scream.rewind();
               scream.play();
+            }
+          }
+        }
+        if(mouseX > 900 && mouseX < 1000 && mouseY > 140 && mouseY < 240)
+        {
+          if(mousePressed)
+          {
+            if(Sp > 0)
+            {
+              Sp = Sp - 10; 
             }
           }
         }
@@ -155,9 +181,9 @@ void draw()
     image(background, 0, 0);
     fill(white);
     textSize(60);
-    text("Sci(rim) UI", width/3, height/16);
+    text("Space Ship UI", width/3, height/2);
     textSize(40);
-    text("Press 'm' or 'x' To Exit", width/3.5, height/9);
+    text("Press 'm' or 'x' To Exit", width/3.5, height/1.8);
   }
   void Menu1()
   {
@@ -181,10 +207,10 @@ void draw()
     
     textSize(30);
     fill(255);
-    text("ITEMS", width/2 + hig1, height/2 + 15);
-    text("MAGIC", width/2 - 310, height/2 + 15);
-    text("LEVEL UP", width/2 - 65, height/2 - hig1);
-    text("TIME", width/2 - 40, height/2 + hig1 + 10);
+    text("OPTIONS", width/2 + hig1, height/2 + 15);
+    text("ENGINE", width/2 - 320, height/2 + 15);
+    text("TIME", width/2 - 40, height/2 - hig1);
+    text("RADAR", width/2 - 40, height/2 + hig1 + 10);
     
     if(mouseX >= width/2 + wid*2 && mouseX <= width/2 + 350 && mouseY <= height/2 + 30 && mouseY >= height/2)
     {
@@ -194,7 +220,6 @@ void draw()
        d = grey;
        if(mousePressed)
        {
-         //items
          UI = 2;
        }
     }
@@ -211,7 +236,6 @@ void draw()
        if(mousePressed)
        {
          UI = 3;
-         //magic
        }
     }
     else
@@ -254,7 +278,7 @@ void draw()
 }
   void options()
   {
-    String[] Items = loadStrings("Items.txt");
+    String[] Items = loadStrings("Options.txt");
     len = Items.length;
   
   
@@ -283,10 +307,10 @@ void draw()
         }
       }
   }
-  void magic()
+  void Engine()
   {
-    String[] Magic = loadStrings("Magic.txt");
-    len = Magic.length;
+    String[] Engine = loadStrings("Engine.txt");
+    len = Engine.length;
   
   
     tint(150);
@@ -377,7 +401,7 @@ void draw()
   }
   void AllM()
   {
-    String[] allM = loadStrings("AllMagic.txt");
+    String[] allM = loadStrings("EngineOptions.txt");
     int lengt = allM.length;
     int divis = 85;
     for(String s: allM)
@@ -406,23 +430,29 @@ void draw()
              {
                if(i==1)
                {
-                 //Fireball
-                 equip2 = 1;
+                 //Self Destruct
+                 speed = 3000;
+                 Sp = 0;
                }
                if(i==2)
                {
-                 //Shock
-                 equip2 = 2;
+                 //Speed Up
+                 if(speed<3000)
+                 {
+                   speed = speed + 20;
+                 }
                }
                if(i==3)
                {
-                 //Moon Walk
-                 equip2 = 3;
+                 if(speed>0)
+                 {
+                   speed = speed - 20;
+                 }
                }
                if(i==4)
                {
-                 //Ice
-                 equip2 = 4;
+                 //Stop
+                 speed = 0;
                }
 
              }
@@ -435,8 +465,7 @@ void draw()
 {
   
   float cx = width / 2;
-  float cy = height / 2;
-  float speed = 0.01; // How fast we want the radar to spin  
+  float cy = height / 2;  
   float theta = map(mouseY, 0, height, 0, TWO_PI);
   float radius = 200;
   
@@ -449,9 +478,12 @@ void draw()
     stroke(0, 255);
     float x = cx + sin(lineTheta) * radius;
     float y = cy - cos(lineTheta) * radius;
-    line(cx, cy, x, y);
-    
-    // An arc might be an even better solution
+    line(cx, cy, x, y); 
+}
+void time()
+{
+ 
+  
   
 }
   
